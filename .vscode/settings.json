@@ -1,0 +1,23 @@
+{
+    "java.project.sourcePaths": ["src/main/java"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.compile.autoSave": true,
+    "java.autobuild.enabled": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "spring-boot.ls.java.home": "",
+    "spring-boot.ls.java.vmargs": "",
+    "java.debug.settings.hotCodeReplace": "auto",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "java.debug.settings.onBuildFailureProceed": true
+}

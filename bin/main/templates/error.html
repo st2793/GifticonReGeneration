@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오류가 발생했습니다</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background: #f8f9fa;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 500px;
+            width: 90%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .error-image {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .error-title {
+            font-size: 24px;
+            color: #dc3545;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .home-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .error-footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 480px) {
+            .error-container {
+                padding: 30px 15px;
+            }
+
+            .error-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .error-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <img src="/static/images/error-character.png" alt="귀여운 에러 캐릭터" class="error-image">
+        <div class="error-title">앗! 죄송합니다 😅</div>
+        <div class="error-message">
+            시스템 에러가 발생했습니다.<br>
+            QR코드나 바코드는 변형되지 않았습니다.
+        </div>
+        <a href="/" class="home-button">홈으로 돌아가기</a>
+        <div class="error-footer">
+            문제가 지속되면 고객센터로 문의해 주세요.
+        </div>
+    </div>
+</body>
+</html> 

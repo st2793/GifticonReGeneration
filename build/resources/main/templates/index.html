@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기프티콘 생성</title>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <style>
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>기프티콘 생성</h1>
+        
+        <form id="gifticonForm" method="post" enctype="multipart/form-data" action="/api/gifticon">
+            <div class="input-group">
+                <label for="productType">상품 타입:</label>
+                <select id="productType" name="productType" required>
+                    <option value="">선택하세요</option>
+                    <option value="QR">QR코드</option>
+                    <option value="BARCODE">바코드</option>
+                    <option value="URL">URL</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label for="productName">상품명:</label>
+                <input type="text" id="productName" name="productName" required>
+            </div>
+            
+            <div id="codeImageGroup" class="input-group hidden">
+                <label for="codeImage">코드 이미지:</label>
+                <input type="file" id="codeImage" name="codeImage" accept="image/*">
+            </div>
+            
+            <div id="urlGroup" class="input-group hidden">
+                <label for="productUrl">상품설명 URL:</label>
+                <input type="url" id="productUrl" name="productUrl">
+            </div>
+            
+            <div class="input-group">
+                <label for="detailMessage">상세 설명:</label>
+                <textarea id="detailMessage" name="detailMessage" required rows="3"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label for="expiryDate">유효기간:</label>
+                <input type="date" id="expiryDate" name="expiryDate" required>
+            </div>
+            
+            <button type="submit">생성하기</button>
+        </form>
+        
+        <div id="result" class="result-container" style="display: none;">
+            <div class="gifticon-card">
+                <h2 id="resultProductName"></h2>
+                <p id="resultDetailMessage" class="detail-message"></p>
+                <div class="code-container">
+                    <div class="code-item">
+                        <img id="qrCode" src="" alt="QR 코드">
+                        <span>QR 코드</span>
+                    </div>
+                    <div class="code-item">
+                        <img id="barcode" src="" alt="바코드">
+                        <span>바코드</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="share-buttons">
+                <button onclick="shareKakao()" class="kakao-share-btn">
+                    <img th:src="@{/static/images/kakao.png}" alt="카카오톡">
+                    카카오톡 공유
+                </button>
+                <button onclick="copyShareLink()" class="copy-link-btn">링크 복사</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script>
+        document.getElementById('productType').addEventListener('change', function() {
+            const codeImageGroup = document.getElementById('codeImageGroup');
+            const urlGroup = document.getElementById('urlGroup');
+            const codeImage = document.getElementById('codeImage');
+            const productUrl = document.getElementById('productUrl');
+
+            // 모든 필드 초기화
+            codeImageGroup.classList.add('hidden');
+            urlGroup.classList.add('hidden');
+            codeImage.required = false;
+            productUrl.required = false;
+
+            // 선택된 타입에 따라 필드 표시
+            switch(this.value) {
+                case 'QR':
+                case 'BARCODE':
+                    codeImageGroup.classList.remove('hidden');
+                    codeImage.required = true;
+                    break;
+                case 'URL':
+                    urlGroup.classList.remove('hidden');
+                    productUrl.required = true;
+                    break;
+            }
+        });
+
+        document.getElementById('gifticonForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            // 전송되는 데이터 자세히 로깅
+            console.log('=== Form Data Details ===');
+            formData.forEach((value, key) => {
+                if (value instanceof File) {
+                    console.log(`${key}: File(${value.name}, ${value.type}, ${value.size} bytes)`);
+                } else {
+                    console.log(`${key}: ${value}`);
+                }
+            });
+            
+            try {
+                const response = await fetch('/api/gifticon', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const contentType = response.headers.get("content-type");
+                let result;
+                
+                if (contentType && contentType.includes("application/json")) {
+                    result = await response.json();
+                } else {
+                    result = await response.text();
+                    console.error('Non-JSON response:', result);
+                    throw new Error('서버에서 잘못된 응답 형식이 반환되었습니다');
+                }
+                
+                if (!response.ok) {
+                    throw new Error(result.error || '처리 중 오류가 발생했습니다');
+                }
+                
+                console.log('=== Response ===', result);
+                alert('기프티콘이 생성되었습니다.');
+                window.location.href = '/share/' + result.shareCode;
+            } catch (error) {
+                console.error('=== Error Details ===', error);
+                alert(error.message || '서버 통신 중 오류가 발생했습니다');
+            }
+        });
+    </script>
+</body>
+</html>
+ 

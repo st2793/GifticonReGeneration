@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.12'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.gifticon'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // MariaDB
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+    
+    // QR 코드/바코드 처리
+    implementation 'com.google.zxing:core:3.5.3'
+    implementation 'com.google.zxing:javase:3.5.3'
+    
+    // 이미지 처리
+    implementation 'net.coobird:thumbnailator:0.4.20'
+    
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    
+    // 개발 도구
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    
+    // 테스트
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    
+    // H2 Database
+    runtimeOnly 'com.h2database:h2'
+
+    // JSON 라이브러리
+    implementation 'org.json:json:20231013'
+}
+
+tasks.named('bootRun') {
+    mainClass = 'com.gifticon.GifticonApplication'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+compileJava {
+    options.compilerArgs << '-parameters'
+} 
